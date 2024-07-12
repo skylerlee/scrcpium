@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "scrcpium"
+version = "0.1.0"
+description = "scrcpy enhancement"
+authors = ["skylerlee <skyler.ac.lee@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
