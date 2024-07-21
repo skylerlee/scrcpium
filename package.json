@@ -1,18 +1,25 @@
 {
-  "name": "@scrcpium/web",
-  "version": "0.1.0",
-  "description": "scrcpy web UI",
-  "main": "index.js",
-  "repository": "git@github.com:skylerlee/scrcpium.git",
-  "author": "skylerlee <skyler.ac.lee@gmail.com>",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.3.4"
-  }
+	"name": "@scrcpium/web",
+	"version": "0.1.0",
+	"description": "scrcpy web UI",
+	"main": "index.js",
+	"repository": "git@github.com:skylerlee/scrcpium.git",
+	"author": "skylerlee <skyler.ac.lee@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev web",
+		"build": "vite build web",
+		"preview": "vite preview web",
+		"prepare": "husky"
+	},
+	"lint-staged": {
+		"**/*.{ts,tsx,scss,json,html}": "biome format --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.8.3",
+		"husky": "^9.1.1",
+		"lint-staged": "^15.2.7",
+		"vite": "^5.3.4"
+	}
 }
