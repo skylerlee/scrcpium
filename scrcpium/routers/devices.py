@@ -5,7 +5,7 @@ router = APIRouter()
 
 
 @router.get("/")
-def list_devices() -> list[AdbDeviceInfo]:
+def devices() -> list[AdbDeviceInfo]:
     return adb.list()
 
 
