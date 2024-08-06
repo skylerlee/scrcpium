@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./web",
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true
+  },
+  "include": ["web/**/*"]
+}
