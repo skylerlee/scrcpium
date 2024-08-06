@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev web",
-    "build": "vite build web",
+    "build": "vite build web --emptyOutDir",
     "preview": "vite preview web",
     "prepare": "husky"
   },
