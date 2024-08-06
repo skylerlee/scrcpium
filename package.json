@@ -14,7 +14,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.{ts,tsx,scss,json,html}": "biome format --write"
+    "**/*.{html,js,json,scss,ts,tsx}": "biome format --write"
   },
   "dependencies": {
     "react": "^18.3.1",
