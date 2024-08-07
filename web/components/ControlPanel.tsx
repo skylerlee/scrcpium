@@ -7,17 +7,16 @@ export const ControlPanel = () => {
 
   return (
     <div>
-      <div className="dropdown">
-        <div tabIndex={0} role="button" className="btn-sm">
-          Click
-        </div>
-        <ul tabIndex={0} className="dropdown-content menu rounded-box shadow w-auto p-1 z-[1]">
+      <div className="flex">
+        <select className="select select-sm select-bordered w-auto">
+          <option disabled selected>
+            Select the device
+          </option>
           {data.map((device) => (
-            <li key={device.serial} className="">
-              <a>{`${device.serial} (${device.state})`}</a>
-            </li>
+            <option key={device.serial}>{`${device.serial} (${device.state})`}</option>
           ))}
-        </ul>
+        </select>
+        {loading ? <span className="loading loading-spinner loading-sm ml-1" /> : null}
       </div>
     </div>
   );

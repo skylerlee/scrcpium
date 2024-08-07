@@ -5,7 +5,7 @@ from starlette.responses import FileResponse
 from .routers import devices
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/assets", StaticFiles(directory="static/assets"), name="static")
 app.include_router(devices.router, prefix="/devices")
 
 
