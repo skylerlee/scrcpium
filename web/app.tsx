@@ -1,8 +1,16 @@
-import React from 'react';
-import { render } from 'react-dom';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Screen } from './components/Screen';
+import { ControlPanel } from './components/ControlPanel';
 
 const App = () => {
-  return <button className="btn">Hello world!</button>;
+  return (
+    <div>
+      <Screen />
+      <ControlPanel />
+    </div>
+  );
 };
 
-render(<App />, document.getElementById('root'));
+const root = createRoot(document.getElementById('root')!);
+root.render(<App />);
