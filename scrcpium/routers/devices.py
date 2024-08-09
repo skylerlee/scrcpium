@@ -20,8 +20,12 @@ def get_device(serial: str) -> DeviceInfo:
     )
 
 
-@router.websocket("/{serial}/connect")
-def connect(websocket: WebSocket, serial: str):
+@router.post("/{serial}/connect")
+def connect(serial: str):
+    client = Client(adb.device(serial))
+    client.start(threaded=True)
+
+
     client = Client(adb.device(serial))
     client.add_listener(EVENT_FRAME, lambda frame: websocket.send_bytes(frame))
     client.start(threaded=True)
