@@ -5,4 +5,6 @@ from dataclasses import dataclass
 class DeviceInfo:
     serial: str
     state: str
-    name: str
+    name: str = None
+    device_name: str = None
+    alive: bool = None
