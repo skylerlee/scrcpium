@@ -2,13 +2,14 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Screen } from './components/Screen';
 import { ControlPanel } from './components/ControlPanel';
+import { AppContext, storeState } from './store';
 
 const App = () => {
   return (
-    <div>
+    <AppContext.Provider value={storeState}>
       <Screen />
       <ControlPanel />
-    </div>
+    </AppContext.Provider>
   );
 };
 

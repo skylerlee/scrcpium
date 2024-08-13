@@ -53,5 +53,10 @@ def disconnect(serial: str) -> DeviceInfo:
 
 @router.websocket("/{serial}/video")
 def connect_video(websocket: WebSocket, serial: str):
-    client = Client(adb.device(serial))
+    client = connections.get(serial)
     client.add_listener(EVENT_FRAME, lambda frame: websocket.send_bytes(frame))
+
+
+@router.websocket("/{serial}/control")
+def connect_control(websocket: WebSocket, serial: str):
+    client = connections.get(serial)

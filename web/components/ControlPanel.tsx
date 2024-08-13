@@ -1,13 +1,18 @@
 import * as React from 'react';
 import type { ChangeEvent } from 'react';
 import useAxios from 'axios-hooks';
+import { setStoreState } from '../store';
 import { IDeviceInfo } from '../types';
 
 export const ControlPanel = () => {
   const [{ loading, data = [] }] = useAxios<IDeviceInfo[]>('/devices/');
 
   const handleDeviceSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
+    if (e.target.value) {
+      setStoreState({
+        serial: e.target.value,
+      });
+    }
   };
 
   return (
