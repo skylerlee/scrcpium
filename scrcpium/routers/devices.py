@@ -1,5 +1,5 @@
 from adbutils import adb
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, HTTPException, WebSocket
 from scrcpy import EVENT_FRAME, Client
 
 from ..schemas.device import DeviceInfo
@@ -40,6 +40,8 @@ def connect(serial: str) -> DeviceInfo:
 @router.post("/{serial}/disconnect")
 def disconnect(serial: str) -> DeviceInfo:
     client = connections.pop(serial)
+    if client is None:
+        raise HTTPException(404, "device not found")
     client.stop()
     dev = client.device
     return DeviceInfo(
@@ -52,11 +54,19 @@ def disconnect(serial: str) -> DeviceInfo:
 
 
 @router.websocket("/{serial}/video")
-def connect_video(websocket: WebSocket, serial: str):
-    client = connections.get(serial)
+async def connect_video(websocket: WebSocket, serial: str):
+    client = connections.get(serial, None)
+    if client is None:
+        raise HTTPException(404, "device not found")
+    await websocket.accept()
     client.add_listener(EVENT_FRAME, lambda frame: websocket.send_bytes(frame))
 
 
 @router.websocket("/{serial}/control")
-def connect_control(websocket: WebSocket, serial: str):
-    client = connections.get(serial)
+async def connect_control(websocket: WebSocket, serial: str):
+    client = connections.get(serial, None)
+    if client is None:
+        raise HTTPException(404, "device not found")
+    await websocket.accept()
+    # client.control.touch()
+    # client.control.swipe()
