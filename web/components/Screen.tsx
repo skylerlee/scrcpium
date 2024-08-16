@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../store';
+import { Connection } from '../models/Connection';
 
 export const Screen = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -8,10 +9,15 @@ export const Screen = () => {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = 'red';
-      ctx.fillRect(0, 0, 100, 100);
+    let conn = null;
+    if (serial) {
+      conn = new Connection(serial);
+      conn.open();
     }
+
+    return () => {
+      conn?.close();
+    };
   }, [serial]);
 
   return <canvas ref={canvasRef} />;

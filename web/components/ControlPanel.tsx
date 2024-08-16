@@ -23,9 +23,7 @@ export const ControlPanel = () => {
           value={serial}
           onChange={handleDeviceSelect}
         >
-          <option disabled selected>
-            Select the device
-          </option>
+          <option selected>Select the device</option>
           {data.map((device) => (
             <option
               key={device.serial}
