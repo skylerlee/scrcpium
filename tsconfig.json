@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "./web",
+    "lib": ["DOM", "ESNext"],
     "jsx": "react",
     "allowJs": true,
     "checkJs": true,

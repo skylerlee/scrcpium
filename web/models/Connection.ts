@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export class Connection {
   private video: WebSocket | null;
   private control: WebSocket | null;
@@ -7,13 +9,15 @@ export class Connection {
     this.control = null;
   }
 
-  open() {
+  async open() {
+    const { data: deviceInfo } = await axios.post(`/devices/${this.serial}/connect`);
     this.video = new WebSocket(`ws://${location.host}/devices/${this.serial}/video`);
     this.control = new WebSocket(`ws://${location.host}/devices/${this.serial}/control`);
   }
 
-  close() {
+  async close() {
     this.video?.close();
     this.control?.close();
+    await axios.get(`/devices/${this.serial}/disconnect`);
   }
 }
