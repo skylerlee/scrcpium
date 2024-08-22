@@ -1,12 +1,18 @@
 from adbutils import adb
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketException, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    HTTPException,
+    WebSocket,
+    WebSocketException,
+    status,
+)
 from scrcpy import EVENT_FRAME, Client
 
 from ..schemas.device import DeviceInfo
+from ..shared.connection_manager import ConnectionManager
 
 router = APIRouter()
-
-connections: dict[str, Client] = {}
 
 
 @router.get("/")
@@ -23,10 +29,11 @@ def get_device(serial: str) -> DeviceInfo:
 
 
 @router.post("/{serial}/connect")
-def connect(serial: str) -> DeviceInfo:
+def connect(serial: str, background_tasks: BackgroundTasks) -> DeviceInfo:
     client = Client(adb.device(serial))
-    client.start(threaded=True)
+    connections = ConnectionManager()
     connections[serial] = client
+    background_tasks.add_task(client.start, threaded=True)
     dev = client.device
     return DeviceInfo(
         serial=dev.get_serialno(),
@@ -39,6 +46,7 @@ def connect(serial: str) -> DeviceInfo:
 
 @router.delete("/{serial}/disconnect")
 def disconnect(serial: str) -> DeviceInfo:
+    connections = ConnectionManager()
     client = connections.pop(serial)
     if client is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "device not found")
@@ -55,6 +63,7 @@ def disconnect(serial: str) -> DeviceInfo:
 
 @router.websocket("/{serial}/video")
 async def connect_video(websocket: WebSocket, serial: str):
+    connections = ConnectionManager()
     client = connections.get(serial, None)
     if client is None:
         raise WebSocketException(4040, "device not found")
@@ -64,6 +73,7 @@ async def connect_video(websocket: WebSocket, serial: str):
 
 @router.websocket("/{serial}/control")
 async def connect_control(websocket: WebSocket, serial: str):
+    connections = ConnectionManager()
     client = connections.get(serial, None)
     if client is None:
         raise WebSocketException(4040, "device not found")
