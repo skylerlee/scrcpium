@@ -1,3 +1,5 @@
+import asyncio
+
 from adbutils import adb
 from fastapi import (
     APIRouter,
@@ -30,10 +32,10 @@ def get_device(serial: str) -> DeviceInfo:
 
 @router.post("/{serial}/connect")
 def connect(serial: str, background_tasks: BackgroundTasks) -> DeviceInfo:
-    client = Client(adb.device(serial))
+    client = Client(adb.device(serial), block_frame=True)
     connections = ConnectionManager()
     connections[serial] = client
-    background_tasks.add_task(client.start, threaded=True)
+    background_tasks.add_task(lambda: client.start(threaded=True))
     dev = client.device
     return DeviceInfo(
         serial=dev.get_serialno(),
@@ -68,7 +70,15 @@ async def connect_video(websocket: WebSocket, serial: str):
     if client is None:
         raise WebSocketException(4040, "device not found")
     await websocket.accept()
-    client.add_listener(EVENT_FRAME, lambda frame: websocket.send_bytes(frame))
+    loop = asyncio.get_event_loop()
+    queue = asyncio.Queue()
+    client.add_listener(
+        EVENT_FRAME,
+        lambda frame: asyncio.run_coroutine_threadsafe(queue.put(frame), loop),
+    )
+    while True:
+        frame = await queue.get()
+        await websocket.send_bytes(frame)
 
 
 @router.websocket("/{serial}/control")
