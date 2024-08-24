@@ -4,9 +4,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
+from .boot import scrcpy
 from .routers import devices
 from .shared.connection_manager import ConnectionManager
 
+scrcpy.apply_patches()
 connections = ConnectionManager()
 
 
