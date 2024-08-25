@@ -333,6 +333,18 @@
   resolved "https://registry.npmmirror.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.18.1.tgz#0cb240c147c0dfd0e3eaff4cc060a772d39e155c"
   integrity sha512-yjk2MAkQmoaPYCSu35RLJ62+dz358nE83VfTePJRp8CG7aMg25mEJYpXFiD+NcevhX8LxD5OP5tktPXnXN7GDw==
 
+"@types/dom-mediacapture-transform@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.npmmirror.com/@types/dom-mediacapture-transform/-/dom-mediacapture-transform-0.1.9.tgz#75558aedd4b0b1e1429c6bc22daee58d8090be3c"
+  integrity sha512-/K96dASG23bqF+VAftybbI5SUj9qSsdsSKZglm7Bq/sIaEve5z8I+GdClARcSQMAAVkH7bc83UI1jiH/qc5LMw==
+  dependencies:
+    "@types/dom-webcodecs" "*"
+
+"@types/dom-webcodecs@*":
+  version "0.1.11"
+  resolved "https://registry.npmmirror.com/@types/dom-webcodecs/-/dom-webcodecs-0.1.11.tgz#2e36e5cc71789551f107e2fe15d956845fa19567"
+  integrity sha512-yPEZ3z7EohrmOxbk/QTAa0yonMFkNkjnVXqbGb7D4rMr+F1dGQ8ZUFxXkyLLJuiICPejZ0AZE9Rrk9wUCczx4A==
+
 "@types/estree@1.0.5":
   version "1.0.5"
   resolved "https://registry.npmmirror.com/@types/estree/-/estree-1.0.5.tgz#a6ce3e556e00fd9895dd872dd172ad0d4bd687f4"

@@ -2,17 +2,19 @@ import * as React from 'react';
 import { useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../store';
 import { Connection } from '../models/Connection';
+import { Codec } from '../models/Codec';
 
 export const Screen = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { serial } = useContext(AppContext);
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d');
     let conn = null;
-    if (serial) {
+    if (videoRef.current && serial) {
       conn = new Connection(serial);
       conn.open();
+      const codec = new Codec();
+      videoRef.current.srcObject = codec.getMediaStream();
     }
 
     return () => {
@@ -20,5 +22,5 @@ export const Screen = () => {
     };
   }, [serial]);
 
-  return <canvas ref={canvasRef} />;
+  return <video ref={videoRef} />;
 };
