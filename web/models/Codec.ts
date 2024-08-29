@@ -4,8 +4,11 @@ export class Codec {
 
   constructor() {
     this.videoGenerator = new MediaStreamTrackGenerator({ kind: 'video' });
+    const videoWriter = this.videoGenerator.writable.getWriter();
     this.videoDecoder = new VideoDecoder({
-      output: (frame) => {},
+      output: (frame) => {
+        videoWriter.write(frame);
+      },
       error: (error) => {
         console.error(error);
       },
@@ -18,9 +21,23 @@ export class Codec {
     return mediaStream;
   }
 
-  decode(data: Blob) {
-    const chunk = data;
-    const encoded = new EncodedVideoChunk(chunk);
+  configure() {
+    this.videoDecoder.configure({
+      codec: 'avc1.4d002a',
+    });
+  }
+
+  appendRawData(data: ArrayBuffer) {
+    const chunk = new TextEncoder().encode(sample);
+    const encoded = new EncodedVideoChunk({
+      type: 'key',
+      timestamp: 0,
+      data: chunk,
+    });
     this.videoDecoder.decode(encoded);
+  }
+
+  close() {
+    this.videoDecoder.close();
   }
 }

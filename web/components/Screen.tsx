@@ -9,13 +9,16 @@ export const Screen = () => {
   const { serial } = useContext(AppContext);
 
   useEffect(() => {
-    let conn = null;
-    if (videoRef.current && serial) {
-      conn = new Connection(serial);
-      conn.open();
+    const video = videoRef.current!;
+    const conn = new Connection(serial);
+    conn.open().then(() => {
       const codec = new Codec();
-      videoRef.current.srcObject = codec.getMediaStream();
-    }
+      conn.listenVideoData((data) => {
+        codec.appendRawData(data);
+      });
+      video.srcObject = codec.getMediaStream();
+      video.play();
+    });
 
     return () => {
       conn?.close();
