@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class Connection {
+export class Connections {
   /**
    * Device video connection
    */

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../store';
-import { Connection } from '../models/Connection';
-import { Codec } from '../models/Codec';
+import { Connections } from '../connections';
+import { Codec } from '../codec';
 
 export const Screen = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -10,10 +10,10 @@ export const Screen = () => {
 
   useEffect(() => {
     const video = videoRef.current!;
-    const conn = new Connection(serial);
-    conn.open().then(() => {
-      const codec = new Codec();
-      conn.listenVideoData((data) => {
+    const conns = new Connections(serial);
+    const codec = new Codec();
+    conns.open().then(() => {
+      conns.listenVideoData((data) => {
         codec.appendRawData(data);
       });
       video.srcObject = codec.getMediaStream();
@@ -21,7 +21,7 @@ export const Screen = () => {
     });
 
     return () => {
-      conn?.close();
+      conns?.close();
     };
   }, [serial]);
 
