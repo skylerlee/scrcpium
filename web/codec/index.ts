@@ -1,6 +1,9 @@
+import { H26xParser } from './h26x_parser';
+
 export class Codec {
   private videoGenerator: MediaStreamTrackGenerator<VideoFrame>;
   private videoDecoder: VideoDecoder;
+  private parser: H26xParser;
 
   constructor() {
     this.videoGenerator = new MediaStreamTrackGenerator({ kind: 'video' });
@@ -13,6 +16,7 @@ export class Codec {
         console.error(error);
       },
     });
+    this.parser = new H26xParser();
   }
 
   getMediaStream() {
@@ -27,14 +31,16 @@ export class Codec {
     });
   }
 
-  appendRawData(data: ArrayBuffer) {
-    const chunk = new TextEncoder().encode(sample);
-    const encoded = new EncodedVideoChunk({
-      type: 'key',
-      timestamp: 0,
-      data: chunk,
-    });
-    this.videoDecoder.decode(encoded);
+  appendRawData(data: Uint8Array) {
+    const chunks = this.parser.parse(data);
+    for (const chunk of chunks) {
+      const encoded = new EncodedVideoChunk({
+        type: 'key',
+        timestamp: 0,
+        data: chunk.data,
+      });
+      this.videoDecoder.decode(encoded);
+    }
   }
 
   close() {
