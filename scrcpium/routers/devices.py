@@ -42,6 +42,7 @@ def connect(serial: str, background_tasks: BackgroundTasks) -> DeviceInfo:
         state=dev.get_state(),
         name=dev.prop.device,
         device_name=client.device_name,
+        resolution=client.resolution,
         alive=client.alive,
     )
 
@@ -59,6 +60,7 @@ def disconnect(serial: str) -> DeviceInfo:
         state=dev.get_state(),
         name=dev.prop.device,
         device_name=client.device_name,
+        resolution=client.resolution,
         alive=client.alive,
     )
 

@@ -7,4 +7,5 @@ class DeviceInfo:
     state: str
     name: str = None
     device_name: str = None
+    resolution: tuple[int, int] = None
     alive: bool = None
