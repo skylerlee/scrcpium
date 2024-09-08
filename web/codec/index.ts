@@ -32,12 +32,11 @@ export class Codec {
   }
 
   appendRawData(data: Uint8Array) {
-    const chunks = this.parser.parse(data);
-    for (const chunk of chunks) {
+    for (const nalu of this.parser.parse(data)) {
       const encoded = new EncodedVideoChunk({
         type: 'key',
         timestamp: 0,
-        data: chunk.data,
+        data: nalu.data,
       });
       this.videoDecoder.decode(encoded);
     }

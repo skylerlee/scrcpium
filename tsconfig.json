@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "baseUrl": "./web",
+    "module": "ESNext",
+    "target": "ES6",
     "lib": ["DOM", "ESNext"],
     "jsx": "react",
     "allowJs": true,

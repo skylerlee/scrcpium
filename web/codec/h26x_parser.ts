@@ -3,5 +3,9 @@ export interface Nalu {
 }
 
 export class H26xParser {
-  parse(chunk: Uint8Array): Nalu[] {}
+  *parse(chunk: Uint8Array): Generator<Nalu> {
+    for (const nalu of annexBSplitNalu(chunk)) {
+      yield { data: nalu };
+    }
+  }
 }
