@@ -1,4 +1,4 @@
-function* annexBSplitNalu(buffer: Uint8Array): Generator<Uint8Array> {
+export function* annexBSplitNalu(buffer: Uint8Array): Generator<Uint8Array> {
   // -1 means we haven't found the first start code
   let start = -1;
   // How many `0x00`s in a row we have counted
