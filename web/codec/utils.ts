@@ -1,4 +1,9 @@
-export function* annexBSplitNalu(buffer: Uint8Array): Generator<Uint8Array> {
+export type NaluChunk = {
+  data: Uint8Array;
+  ended: boolean;
+};
+
+export function* annexBSplitNalu(buffer: Uint8Array): Generator<NaluChunk> {
   // -1 means we haven't found the first start code
   let start = -1;
   // How many `0x00`s in a row we have counted
@@ -38,7 +43,10 @@ export function* annexBSplitNalu(buffer: Uint8Array): Generator<Uint8Array> {
     }
     if (byte === 0x01) {
       // Found another NAL unit
-      yield buffer.subarray(start, i - prevZeroCount);
+      yield {
+        data: buffer.subarray(start, i - prevZeroCount),
+        ended: true,
+      };
       start = i + 1;
       continue;
     }
@@ -64,5 +72,8 @@ export function* annexBSplitNalu(buffer: Uint8Array): Generator<Uint8Array> {
   if (inEmulation) {
     throw new Error('Invalid data');
   }
-  yield buffer.subarray(start, buffer.length);
+  yield {
+    data: buffer.subarray(start, buffer.length),
+    ended: false,
+  };
 }

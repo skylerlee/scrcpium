@@ -11,13 +11,28 @@ export interface Nalu {
 }
 
 export class H26xParser {
-  _debugPrint(chunk: Uint8Array) {
-    console.log(Array.prototype.map.call(chunk, (x) => x.toString(16).padStart(2, '0')).join(' '));
+  private _prevBuffer = new Uint8Array(0);
+
+  _debug(buffer: Uint8Array) {
+    console.log(Array.prototype.map.call(buffer, (x) => x.toString(16).padStart(2, '0')).join(' '));
   }
 
-  *parse(chunk: Uint8Array): Generator<Nalu> {
-    for (const nalu of annexBSplitNalu(chunk)) {
-      const naluType = nalu[0] & 0x1f;
+  _concat(buffer: Uint8Array) {
+    const newBuffer = new Uint8Array(this._prevBuffer.length + buffer.length);
+    newBuffer.set(this._prevBuffer);
+    newBuffer.set(buffer, this._prevBuffer.length);
+    return newBuffer;
+  }
+
+  *parse(buffer: Uint8Array): Generator<Nalu> {
+    for (const naluChunk of annexBSplitNalu(this._concat(buffer))) {
+      if (!naluChunk.ended) {
+        // store remaining data
+        this._prevBuffer = naluChunk.data;
+        continue;
+      }
+      const naluData = naluChunk.data;
+      const naluType = naluData[0] & 0x1f;
       switch (naluType) {
         case NaluType.SPS:
           console.log('SPS');
