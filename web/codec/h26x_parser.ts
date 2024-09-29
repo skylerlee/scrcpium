@@ -46,7 +46,7 @@ export class H26xParser {
         default:
           break;
       }
-      yield { data: nalu };
+      yield { data: naluData };
     }
   }
 }
