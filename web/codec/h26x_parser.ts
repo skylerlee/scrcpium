@@ -44,7 +44,7 @@ export class H26xParser {
           console.log('AUD');
           break;
         default:
-          continue;
+          break;
       }
       yield { data: nalu };
     }
